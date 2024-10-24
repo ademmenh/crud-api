@@ -20,36 +20,20 @@ app.get('/adding/:num1/:num2', (req, res) => {
 })
 
 
+const logParams = require('./functions')
 
 app.get('/adding2', (req, res) => {
     let result = 0
     let bodyParams = Object.entries(req.body);
+    console.log(bodyParams)
+    let stringParams = logParams(bodyParams);
+    console.log(stringParams)
 
-    if (bodyParams.length === 0) {
-        console.log('GET /adding2')
-        res.send(`${result}`);
-        return;
+    console.log(`GET /adding2${stringParams}`);
+    for (let [key, value] of bodyParams) {
+        result += value;
     }
-    
-    let stringParams = '?'
-    if (bodyParams.length === 1)
-    {
-        stringParams += `=${bodyParams[0][0]}=${bodyParams[0][1]}`
-        console.log(`GET /adding2${stringParams}`)
-        result = bodyParams[0][1];
-        res.send(`${result}`)
-        return;
-    }
-
-    // else
-    stringParams += `${bodyParams[0][0]}=${bodyParams[0][1]}`
-    result = Number(bodyParams[0][1])
-    for (let i=1; i<bodyParams.length; i++) {
-        stringParams += `&${bodyParams[i][0]}=${bodyParams[i][1]}`
-        result += Number(bodyParams[i][1])
-    }
-    console.log(`GET /adding2${stringParams}`)
-    res.send(`${result}`)
+    res.json({result: result})
     return;
 })
 
