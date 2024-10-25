@@ -23,15 +23,11 @@ app.get('/adding/:num1/:num2', (req, res) => {
 const logParams = require('./functions')
 
 app.get('/adding2', (req, res) => {
+    console.log(`GET ${req._parsedUrl.path}`)
     let result = 0
-    let bodyParams = Object.entries(req.body);
-    console.log(bodyParams)
-    let stringParams = logParams(bodyParams);
-    console.log(stringParams)
 
-    console.log(`GET /adding2${stringParams}`);
-    for (let [key, value] of bodyParams) {
-        result += value;
+    for (let [key, value] of Object.entries(req.query)) {
+        result += Number(value);
     }
     res.json({result: result})
     return;
