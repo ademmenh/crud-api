@@ -1,40 +1,26 @@
 
 const express = require('express')
+const PORT = 8000
 
 
 const app = express()
 
 
-app.use(express.json())
+
+app.use(express.json({type: 'application/json'}))
+
+// log requests
+app.use((req, res, next) => {
+    console.log(`${new Date().toUTCString()}        ${req.method} ${req.path}`)
+    next()
+})
+
+
 
 app.get('/hello', (req, res) => {
-    console.log('GET /hello')
-    res.send('hellooooooo')
+    console.log(req.body)
+    res.json({result: "hello"})
 })
 
 
-
-app.get('/adding/:num1/:num2', (req, res) => {
-    console.log(`GET /adding/${req.params.num1}/${req.params.num2}`)
-    res.send(`${Number(req.params.num1) + Number(req.params.num2)}`)
-})
-
-
-const logParams = require('./functions')
-
-app.get('/adding2', (req, res) => {
-    console.log(`GET ${req._parsedUrl.path}`)
-    let result = 0
-
-    for (let [key, value] of Object.entries(req.query)) {
-        result += Number(value);
-    }
-    res.json({result: result})
-    return;
-})
-
-
-
-app.listen(8000, () => {
-    console.log('the server is running on the porst 8000 !')
-})
+app.listen(PORT, () => {console.log(`Run successfully on port ${PORT}`)})
