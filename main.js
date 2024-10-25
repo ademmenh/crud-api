@@ -3,11 +3,20 @@ const express = require('express')
 const PORT = 8000
 
 
+class webError extends Error {
+    constructor ({status, details}) {
+        super()
+        this.status = status
+        this.details = details
+    }
+}
+
+
 const app = express()
 
 
-
-app.use(express.json({type: 'application/json'}))
+// json body parser
+app.use(express.json({limit: '1KB'}))
 
 // log requests
 app.use((req, res, next) => {
@@ -17,10 +26,26 @@ app.use((req, res, next) => {
 
 
 
-app.get('/hello', (req, res) => {
-    console.log(req.body)
-    res.json({result: "hello"})
+app.get('/hello', (req, res, next) => {
+    const {name} = req.query
+
+    if (name) { 
+        res.json({result: `hello ${name}`})
+    } else {
+        next (new webError({status: 422, details: "invalid data"}))
+    }
 })
 
 
-app.listen(PORT, () => {console.log(`Run successfully on port ${PORT}`)})
+// error handler
+app.use((err, req, res, next) => {
+    console.log(err)
+    const {status, details} = err
+    res.status(status).json({error: details})
+})
+
+
+
+app.listen(PORT, () => {
+    console.log(`Run successfully on port ${PORT}`)
+})
