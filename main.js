@@ -25,7 +25,6 @@ app.use((req, res, next) => {
 })
 
 
-
 app.get('/hello', (req, res, next) => {
     const {name} = req.query
 
@@ -37,9 +36,15 @@ app.get('/hello', (req, res, next) => {
 })
 
 
+
+// 404 error handler
+app.use((req, res, next) => {
+    res.status(404).json({result: "route not found !"})
+})
+
+
 // error handler
 app.use((err, req, res, next) => {
-    console.log(err)
     const {status, details} = err
     res.status(status).json({error: details})
 })
