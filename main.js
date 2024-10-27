@@ -16,10 +16,8 @@ const app = express()
 
 app.use(express.json({limit: '1KB'}))
 
-app.use(logMiddleware)
 
-
-app.get('/hello', getHello)
+app.get('/hello', logMiddleware, getHello)
 
 
 app.use(errMiddleware)
