@@ -1,10 +1,14 @@
 
-export const getHello = (req, res) => {
+import {WebError} from '../utils/error.js'
+
+export const getHello = (req, res, next) => {
     const {name} = req.query
     if (!name) {
-        res.status(422).json({error: 'Unprocessable Content'})
+        const error = new WebError({status: 422, message: "Unprocessable Content"})
+        next(error, req, res)
         return;
     }
 
     res.json({result: `hello ${name}`})
+    next(req, res)
 }

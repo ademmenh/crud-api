@@ -1,5 +1,5 @@
 
-export const logMiddleware = (req, res, next) => {
-    console.log(`${new Date().toUTCString()}    ${req.method} ${req.url}`)
-    next()
+export const logMiddleware = (req, res) => {
+    console.log('log executed')
+    console.log(`${new Date().toUTCString()}    200 ${req.method} ${req.url}`)
 }

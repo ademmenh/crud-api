@@ -2,8 +2,9 @@
 import express from 'express'
 import {initServer} from './config/init.js'
 
+import { WebError } from './utils/error.js'
 import {logMiddleware} from './middlewares/log.js'
-import {errMiddleware} from './middlewares/err.js'
+import {errMiddleware, err404Middleware} from './middlewares/err.js'
 
 import {getHello} from './handlers/hello.js'
 
@@ -11,15 +12,13 @@ import {getHello} from './handlers/hello.js'
 
 export const app = express()
 
-
-
 app.use(express.json({limit: '1KB'}))
 
+app.get('/hello', getHello, logMiddleware)
 
-app.get('/hello', logMiddleware, getHello)
+app.use(errMiddleware) 
 
-
-app.use(errMiddleware)
+app.use(err404Middleware)
 
 
 initServer()
