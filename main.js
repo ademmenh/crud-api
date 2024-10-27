@@ -1,5 +1,6 @@
 
 import express from 'express'
+import {initServer} from './config/init.js'
 
 import {logMiddleware} from './middlewares/log.js'
 import {errMiddleware} from './middlewares/err.js'
@@ -8,9 +9,7 @@ import {getHello} from './handlers/hello.js'
 
 
 
-const PORT = 8000
-
-const app = express()
+export const app = express()
 
 
 
@@ -23,6 +22,4 @@ app.get('/hello', logMiddleware, getHello)
 app.use(errMiddleware)
 
 
-app.listen(PORT, () => {
-    console.log(`Run successfully on port ${PORT}`)
-})
+initServer()
