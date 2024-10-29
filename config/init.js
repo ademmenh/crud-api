@@ -11,11 +11,15 @@ const DB_URI = process.env.DB_URI
 // console.log(DB_URI)
 
 export const initServer = async () => {
-    try {
-        await mongoose.connect(DB_URI)
+    await mongoose.connect(DB_URI)
+    .then(() => {
         console.log('Connected Succesfully to DataBase')
-        app.listen(PORT, () => {console.log(`Server listens at port ${PORT}...`)})
-    } catch {
+        app.listen(PORT, () => {console.log(`Server Listen at Port ${PORT}...`)})
+    })
+    .catch((err) => {
         console.log('Failed to Connect to DataBase')
-    }
+        console.log()
+        console.log(err)
+    })
+
 }
