@@ -2,13 +2,14 @@
 import mongoose from 'mongoose'
 
 const mealSchema = mongoose.Schema({
-    id: {
+    _id: {
         type: mongoose.Types.ObjectId,
         auto: true,
     },
     name: {
         type: String,
         require: true,
+        unique: true,
     },
     genre: {
         type: String,

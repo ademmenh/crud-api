@@ -1,20 +1,22 @@
 
 import {WebError} from "../utils/weberror.js"
-import {Meal} from '../db/meals.js'
+import {Meal} from '../db/meal.js'
 
 
 export const postMeal = async (req, res, next) => {
 
-    const meal = req.body.data
+    const reqMeal = req.body
 
     try {
-        await Meal(meal)
+        const newMeal = new Meal(reqMeal)
+        const resMeal = await newMeal.save()
+        res.status(200).json({data: resMeal})
+
     } catch {
-        const err = new WebError({error: "Unprocessable Content"})
+        const err = new WebError({status: 422, message: "Unprocessable Content"})
         next(err)
         return;
     }
 
-    res.status(200).json({data: meal})
     next()
 }
