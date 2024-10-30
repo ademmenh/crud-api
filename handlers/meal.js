@@ -3,7 +3,7 @@ import {WebError} from "../utils/weberror.js"
 import {Meal} from '../db/meal.js'
 
 
-export const postMeal = async (req, res, next) => {
+export const postMeals = async (req, res, next) => {
 
     const reqMeal = req.body
 
@@ -20,3 +20,23 @@ export const postMeal = async (req, res, next) => {
 
     next()
 }
+
+export const getMeals = async (req, res, next) => {
+    const id = req.params.id
+
+    try {
+        const meal = await Meal.findById(id)
+        
+        if (!meal) {
+            throw new WebError({status: 422, message:"Unprocessable Content"})
+            return;
+        }
+
+        res.status(200).json({data: meal})
+    } catch (err) {
+        next (err)
+        return;
+    }
+
+}
+

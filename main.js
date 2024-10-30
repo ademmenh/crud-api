@@ -6,7 +6,7 @@ import {logMiddleware} from './middlewares/log.js'
 import {errMiddleware, err404Middleware} from './middlewares/err.js'
 
 import {getHello} from './handlers/hello.js'
-import {postMeal} from './handlers/meal.js'
+import {postMeals, getMeals} from './handlers/meal.js'
 
 
 
@@ -16,7 +16,10 @@ app.use(express.json({limit: '1KB'}))
 
 app.get('/hello', getHello, logMiddleware)
 
-app.post('/meal', postMeal, logMiddleware)
+app.post('/meals', postMeal, logMiddleware)
+
+app.get('/meals', getMeal, logMiddleware)
+
 
 app.use(err404Middleware)
 
