@@ -16,9 +16,9 @@ app.use(express.json({limit: '1KB'}))
 
 app.get('/hello', getHello, logMiddleware)
 
-app.post('/meals', postMeal, logMiddleware)
+app.post('/meals', postMeals, logMiddleware)
 
-app.get('/meals', getMeal, logMiddleware)
+app.get('/meals/:id', getMeals, logMiddleware)
 
 
 app.use(err404Middleware)
