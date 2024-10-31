@@ -45,7 +45,6 @@ export const getMeals = async (req, res, next) => {
     try {
         if (!meal) {
             throw new WebError({status: 422, message: "Unprocessable Content"})
-            return;
         }
     } catch (error) {
         next(error)
@@ -55,6 +54,34 @@ export const getMeals = async (req, res, next) => {
     res.status(200).json({data: meal})
 }
 
+
+
+export const putMeals = async (req, res, next) => {
+    const id = req.params.id
+    let reqMeal = req.body
+    let meal;
+
+    try {
+        if (Object.keys(reqMeal).length === 0){
+            throw new WebError({status: 422, message: "Unprocessable Content"})
+        }
+    } catch (error) {
+        next(error)
+        return;
+    }
+
+    try {
+        meal = await Meal.findByIdAndUpdate(id, reqMeal, {new: true})
+    } catch (err) {
+        console.log(err)
+        const error = new WebError({status: 500, message: "Internal Server Error"})
+        next(error)
+        return;
+    }
+    
+    res.status(200).json({data: meal})
+    next()
+}
 
 
 export const deleteMeals = async (req, res, next) => {
