@@ -54,3 +54,29 @@ export const getMeals = async (req, res, next) => {
 
     res.status(200).json({data: meal})
 }
+
+
+
+export const deleteMeals = async (req, res, next) => {
+    const id = req.params.id
+    let meal;
+
+    try {
+        meal = await Meal.findByIdAndDelete(id)
+    } catch {
+        throw new WebError({status: 500, message: "Internal Server Error"})
+        return;
+    }
+
+    try {
+        if (!meal) {
+            throw new WebError ({status: 422, messge: "Unprocessable Content"})
+        }
+    } catch (error) {
+        next(error)
+        return;
+    }
+
+    next()
+    res.status(200).json({data: meal})
+}
