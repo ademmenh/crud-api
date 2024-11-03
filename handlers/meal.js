@@ -30,7 +30,7 @@ export const postMeals = async (req, res, next) => {
 
 
 
-export const getMeals = async (req, res, next) => {
+export const getMealsById = async (req, res, next) => {
     const id = req.params.id
     let meal;
     
@@ -52,6 +52,29 @@ export const getMeals = async (req, res, next) => {
     }
 
     res.status(200).json({data: meal})
+}
+
+
+
+export const getMeals = async (req, res, next) => {
+    const {name, genre, price, available} = req.body
+    let meal;
+
+    try {
+        meal = await Meal.find({
+            name: name,
+            genre: genre,
+            price: price,
+            available: available,
+        })
+    } catch {
+        const error = new WebError({status: 500, message: "Internale Server Error"})
+        next(error)
+        return;
+    }
+
+    res.status(200).json({data: meal})
+    next()
 }
 
 
