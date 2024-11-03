@@ -59,14 +59,33 @@ export const getMealsById = async (req, res, next) => {
 export const getMeals = async (req, res, next) => {
     const {name, genre, price, available} = req.body
     let meal;
+    let FILTERS = [];
+    let oFilter = {};
+
+    if (name) {
+        FILTERS.push(["name", name])
+    }
+
+    if (genre) {
+        FILTERS.push(["genre", genre])
+    }
+
+    if (price) {
+        FILTERS.push(["price", price])
+    }
+
+    if (available) {
+        FILTERS.push(["available", available])
+    }
+
+    for (let filter of FILTERS) {
+        if (filter[1]) {
+            oFilter[filter[0]] = filter[1] 
+        }
+    }
 
     try {
-        meal = await Meal.find({
-            name: name,
-            genre: genre,
-            price: price,
-            available: available,
-        })
+        meal = await Meal.find(oFilter)
     } catch {
         const error = new WebError({status: 500, message: "Internale Server Error"})
         next(error)
@@ -76,7 +95,6 @@ export const getMeals = async (req, res, next) => {
     res.status(200).json({data: meal})
     next()
 }
-
 
 
 export const putMeals = async (req, res, next) => {
