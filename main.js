@@ -6,7 +6,7 @@ import {logMiddleware} from './middlewares/log.js'
 import {errMiddleware, err404Middleware} from './middlewares/err.js'
 
 import {getHello} from './handlers/hello.js'
-import {postMeals, getMealsById, getMeals, putMeals, deleteMeals} from './handlers/meal.js'
+import {postMeals, getMealsById, getMeals, putMeals, deleteMealsById, deleteMeals} from './handlers/meal.js'
 
 
 
@@ -26,7 +26,9 @@ app.get('/meals', getMeals, logMiddleware)
 
 app.put('/meals/:id', putMeals, logMiddleware)
 
-app.delete('/meals/:id', deleteMeals, logMiddleware)
+app.delete('/meals/:id', deleteMealsById, logMiddleware)
+
+app.delete('/meals', deleteMeals, logMiddleware)
 
 
 app.use(err404Middleware)

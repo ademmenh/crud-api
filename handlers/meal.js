@@ -125,7 +125,7 @@ export const putMeals = async (req, res, next) => {
 }
 
 
-export const deleteMeals = async (req, res, next) => {
+export const deleteMealsById = async (req, res, next) => {
     const id = req.params.id
     let meal;
 
@@ -141,6 +141,48 @@ export const deleteMeals = async (req, res, next) => {
             throw new WebError ({status: 422, messge: "Unprocessable Content"})
         }
     } catch (error) {
+        next(error)
+        return;
+    }
+
+    next()
+    res.status(200).json({data: meal})
+}
+
+
+
+export const deleteMeals = async (req, res, next) => {
+    const {name, genre, price, available} = req.body
+    let meal;
+    let FILTERS = [];
+    let oFilter = {};
+
+    if (name) {
+        FILTERS.push(["name", name])
+    }
+
+    if (genre) {
+        FILTERS.push(["genre", genre])
+    }
+
+    if (price) {
+        FILTERS.push(["price", price])
+    }
+
+    if (available) {
+        FILTERS.push(["available", available])
+    }
+
+    for (let filter of FILTERS) {
+        if (filter[1]) {
+            oFilter[filter[0]] = filter[1] 
+        }
+    }
+
+    try {
+        meal = await Meal.deleteMany(oFilter)
+    } catch {
+        let error = new WebError({status: 500, message: "Internal Server Error"})
         next(error)
         return;
     }
