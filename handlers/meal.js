@@ -1,6 +1,7 @@
 
 import {WebError} from "../utils/weberror.js"
-import {Meal} from '../db/meal.js'
+import {queryfilterMeals} from "../utils/filters/meals.js"
+import {Meal} from "../db/meal.js"
 
 
 export const postMeals = async (req, res, next) => {
@@ -57,35 +58,12 @@ export const getMealsById = async (req, res, next) => {
 
 
 export const getMeals = async (req, res, next) => {
-    const {name, genre, price, available} = req.body
     let meal;
-    let FILTERS = [];
-    let oFilter = {};
-
-    if (name) {
-        FILTERS.push(["name", name])
-    }
-
-    if (genre) {
-        FILTERS.push(["genre", genre])
-    }
-
-    if (price) {
-        FILTERS.push(["price", price])
-    }
-
-    if (available) {
-        FILTERS.push(["available", available])
-    }
-
-    for (let filter of FILTERS) {
-        if (filter[1]) {
-            oFilter[filter[0]] = filter[1] 
-        }
-    }
+    
+    let filter = queryfilterMeals(req.query);
 
     try {
-        meal = await Meal.find(oFilter)
+        meal = await Meal.find(filter)
     } catch {
         const error = new WebError({status: 500, message: "Internale Server Error"})
         next(error)
@@ -152,35 +130,11 @@ export const deleteMealsById = async (req, res, next) => {
 
 
 export const deleteMeals = async (req, res, next) => {
-    const {name, genre, price, available} = req.body
     let meal;
-    let FILTERS = [];
-    let oFilter = {};
-
-    if (name) {
-        FILTERS.push(["name", name])
-    }
-
-    if (genre) {
-        FILTERS.push(["genre", genre])
-    }
-
-    if (price) {
-        FILTERS.push(["price", price])
-    }
-
-    if (available) {
-        FILTERS.push(["available", available])
-    }
-
-    for (let filter of FILTERS) {
-        if (filter[1]) {
-            oFilter[filter[0]] = filter[1] 
-        }
-    }
+    let filter = queryfilterMeals(req.query)
 
     try {
-        meal = await Meal.deleteMany(oFilter)
+        meal = await Meal.deleteMany(filter)
     } catch {
         let error = new WebError({status: 500, message: "Internal Server Error"})
         next(error)
