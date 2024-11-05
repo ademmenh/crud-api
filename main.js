@@ -6,7 +6,7 @@ import {logMiddleware} from './middlewares/log.js'
 import {errMiddleware, err404Middleware} from './middlewares/err.js'
 
 import {getHello} from './handlers/hello.js'
-import {postMeals, getMealsById, getMeals, putMeals, deleteMealsById, deleteMeals} from './handlers/meal.js'
+import {postMeals, getMealsById, getMeals, putMeals, deleteMealsById, deleteMeals} from './handlers/meals.js'
 
 
 

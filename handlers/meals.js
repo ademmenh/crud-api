@@ -65,7 +65,7 @@ export const getMeals = async (req, res, next) => {
     try {
         meal = await Meal.find(filter)
     } catch {
-        const error = new WebError({status: 500, message: "Internale Server Error"})
+        const error = new WebError({status: 500, message: "Internal Server Error"})
         next(error)
         return;
     }
